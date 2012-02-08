@@ -111,15 +111,16 @@ describe Mail::Encodings do
       end
     end
 
-    it "should split the string up into bite sized chunks that can be wrapped easily" do
+    it "should not split the string up into bite sized chunks" do
       string = "This is あ really long string This is あ really long string This is あ really long string This is あ really long string This is あ really long string"
-      result = '=?UTF-8?B?VGhpcyBpcyDjgYIgcmVhbGx5IGxvbmcgc3RyaW5nIFRoaXMgaXMg44GCIHJl?= =?UTF-8?B?YWxseSBsb25nIHN0cmluZyBUaGlzIGlzIOOBgiByZWFsbHkgbG9uZyBzdHJp?= =?UTF-8?B?bmcgVGhpcyBpcyDjgYIgcmVhbGx5IGxvbmcgc3RyaW5nIFRoaXMgaXMg44GC?= =?UTF-8?B?IHJlYWxseSBsb25nIHN0cmluZw==?='
+      expected = '=?UTF-8?B?VGhpcyBpcyDjgYIgcmVhbGx5IGxvbmcgc3RyaW5nIFRoaXMgaXMg44GCIHJlYWxseSBsb25nIHN0cmluZyBUaGlzIGlzIOOBgiByZWFsbHkgbG9uZyBzdHJpbmcgVGhpcyBpcyDjgYIgcmVhbGx5IGxvbmcgc3RyaW5nIFRoaXMgaXMg44GCIHJlYWxseSBsb25nIHN0cmluZw==?='
+
       if RUBY_VERSION >= "1.9.1"
         string = string.force_encoding('UTF-8')
-        Mail::Encodings.b_value_encode(string).should eq(result)
+        Mail::Encodings.b_value_encode(string).should eq expected
       else
         encoding = 'UTF-8'
-        Mail::Encodings.b_value_encode(string, encoding).should eq(result)
+        Mail::Encodings.b_value_encode(string, encoding).should expected
       end
     end
 
